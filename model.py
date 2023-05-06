@@ -82,13 +82,10 @@ def isFirstPartSubesetOfSecondPart(first, second):
     return set(first).issubset(set(second))
 
 def checkForTransitivity(listOfFO, dependentAttributesOfPK):
-    count = 0
-    while count < 100:
-        for tempFD in listOfFO:
-            if isFirstPartSubesetOfSecondPart(tempFD.left, set(dependentAttributesOfPK)): # checking for transitivity
+    for tempFD in listOfFO:
+            if isFirstPartSubesetOfSecondPart(tempFD.left, set(dependentAttributesOfPK)):
                 dependentAttributesOfPK = dependentAttributesOfPK + tempFD.right
                 dependentAttributesOfPK = ''.join(set(dependentAttributesOfPK))
-        count += 1
     
     return dependentAttributesOfPK
 
