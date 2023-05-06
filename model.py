@@ -26,9 +26,34 @@ class Relation:
         return output
     
 # PK - Primary Key
-def findPrimaryKeys(listOfFO, attributes):
-    allPossiblePKCombinations = [] 
+def findPrimaryKeys(listOfFO, attributes): 
     candidatesPK = [] 
+
+    allPossiblePKCombinations = getAllPossibleCombinationsForPK(attributes)
+
+    for tempPK in allPossiblePKCombinations:
+        tempPK = ''.join(tempPK)
+       
+        if isThereSmallerKeyInTheList(candidatesPK, tempPK):
+            break
+
+        dependentAttributesOfPK = getDependentAttributesOfPK(listOfFO, tempPK)
+
+        if dependentAttributesOfPK == "": 
+            continue
+
+        dependentAttributesOfPK = dependentAttributesOfPK + tempPK # adding left side to the right
+        dependentAttributesOfPK = ''.join(set(dependentAttributesOfPK)) # removes duplicates from str
+        dependentAttributesOfPK = checkForTransitivity(listOfFO, dependentAttributesOfPK)
+
+        # if this is primary key, add it to list candidates
+        if isPKValid(attributes, dependentAttributesOfPK): 
+            candidatesPK.append(tempPK)
+
+    return candidatesPK
+
+def getAllPossibleCombinationsForPK(attributes):
+    allPossiblePKCombinations = [] 
 
     MIN_PK_LENGTH = 1
     MAX_PK_LENGTH = len(attributes)
@@ -37,35 +62,35 @@ def findPrimaryKeys(listOfFO, attributes):
         tempListPossiblePKs = itertools.combinations(attributes, primaryKeyLength)
         allPossiblePKCombinations += tempListPossiblePKs
 
-    for tempPK in allPossiblePKCombinations:
-        tempPK = ''.join(tempPK)
-       
-        if(candidatesPK and len(candidatesPK[0]) < len(tempPK)):
-            break
+    return allPossiblePKCombinations
 
-        primaryKeyRightSide = set() # create temp set
+def isThereSmallerKeyInTheList(candidatesPK, tempPK):
+    return candidatesPK and len(candidatesPK[0]) < len(tempPK)
 
-        for tempFD in listOfFO: 
-            if set(tempFD.left).issubset(set(tempPK)): # add right side if left side is in the key
-                primaryKeyRightSide = primaryKeyRightSide.union(set(tempFD.right)) # makes union between two right sides
+def getDependentAttributesOfPK(listOfFO, tempPK):
+    dependentAttributeOfPK = set()
 
-        primaryKeyRightSide = ''.join(sorted(primaryKeyRightSide)) # values of the right side getted using list of FD
+    for tempFD in listOfFO: 
+        if isFirstPartSubesetOfSecondPart(tempFD.left, set(tempPK)): 
+            dependentAttributeOfPK = dependentAttributeOfPK.union(set(tempFD.right)) 
 
-        if primaryKeyRightSide == "": # if empty skip other code
-            continue
+    dependentAttributeOfPK = ''.join(sorted(dependentAttributeOfPK)) 
 
-        expdandedPKRightSide = primaryKeyRightSide + tempPK # adding left side to the right
-        expdandedPKRightSide = ''.join(set(expdandedPKRightSide)) # removes duplicates from str
-        count = 0
+    return dependentAttributeOfPK
 
-        while count < 100:
-            for tempFD in listOfFO:
-                if set(tempFD.left).issubset(set(expdandedPKRightSide)):
-                    expdandedPKRightSide = expdandedPKRightSide + tempFD.right
-                    expdandedPKRightSide = ''.join(set(expdandedPKRightSide))
-            count += 1
+def isFirstPartSubesetOfSecondPart(first, second):
+    return set(first).issubset(set(second))
 
-        if set(attributes).issubset(set(expdandedPKRightSide)) and len(attributes) == len(expdandedPKRightSide): # if this is primary key, add it to list candidates
-            candidatesPK.append(tempPK)
+def checkForTransitivity(listOfFO, dependentAttributesOfPK):
+    count = 0
+    while count < 100:
+        for tempFD in listOfFO:
+            if isFirstPartSubesetOfSecondPart(tempFD.left, set(dependentAttributesOfPK)): # checking for transitivity
+                dependentAttributesOfPK = dependentAttributesOfPK + tempFD.right
+                dependentAttributesOfPK = ''.join(set(dependentAttributesOfPK))
+        count += 1
+    
+    return dependentAttributesOfPK
 
-    return candidatesPK
+def isPKValid(attributes, dependentAttributesOfPK):
+    return set(attributes).issubset(set(dependentAttributesOfPK)) and len(attributes) == len(dependentAttributesOfPK)

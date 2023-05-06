@@ -32,7 +32,7 @@ for element in ro:
 
 print("BCNF N F : ")
 
-RO_FO=algorithm.doBCNormalForm(relacija1)
+RO_FO = algorithm.doBCNormalForm(relacija1)
 print("\nRO : ")
 for element in RO_FO:
     print(element)

@@ -83,8 +83,8 @@ def isSuperKey(keys,FO):
     return False
 
 
-def removeChars(base, string2):
-    for char in string2:
+def removeChars(base, substring):
+    for char in substring:
         base = base.replace(char, '')
     return base
 
