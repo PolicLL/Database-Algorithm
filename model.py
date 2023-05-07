@@ -8,16 +8,16 @@ class FunctionalDependency:
      return self.left + '->' + self.right
 
 class Relation:
-    def __init__(self, attributes, listOfFO):
+    def __init__(self, attributes, listOfFD):
         self.attributes = attributes
-        self.listOfFO = listOfFO
-        self.keys = findPrimaryKeys(listOfFO, attributes)
+        self.listOfFD = listOfFD
+        self.keys = findPrimaryKeys(listOfFD, attributes)
     def __str__(self):
         output = "Attributes : "
         output += str(self.attributes)
         output += "\nFunctional Dependencies :  "
 
-        for element in self.listOfFO:
+        for element in self.listOfFD:
             output += str(element) + " "
 
         output += "\nKeys : "
@@ -26,7 +26,7 @@ class Relation:
         return output
     
 # PK - Primary Key
-def findPrimaryKeys(listOfFO, attributes): 
+def findPrimaryKeys(listOfFD, attributes): 
     candidatesPK = [] 
 
     allPossiblePKCombinations = getAllPossibleCombinationsForPK(attributes)
@@ -37,14 +37,14 @@ def findPrimaryKeys(listOfFO, attributes):
         if isThereSmallerKeyInTheList(candidatesPK, tempPK):
             break
 
-        dependentAttributesOfPK = getDependentAttributesOfPK(listOfFO, tempPK)
+        dependentAttributesOfPK = getDependentAttributesOfPK(listOfFD, tempPK)
 
         if dependentAttributesOfPK == "": 
             continue
 
         dependentAttributesOfPK = dependentAttributesOfPK + tempPK # adding left side to the right
         dependentAttributesOfPK = ''.join(set(dependentAttributesOfPK)) # removes duplicates from str
-        dependentAttributesOfPK = checkForTransitivity(listOfFO, dependentAttributesOfPK)
+        dependentAttributesOfPK = checkForTransitivity(listOfFD, dependentAttributesOfPK)
 
         # if this is primary key, add it to list candidates
         if isPKValid(attributes, dependentAttributesOfPK): 
@@ -67,10 +67,10 @@ def getAllPossibleCombinationsForPK(attributes):
 def isThereSmallerKeyInTheList(candidatesPK, tempPK):
     return candidatesPK and len(candidatesPK[0]) < len(tempPK)
 
-def getDependentAttributesOfPK(listOfFO, tempPK):
+def getDependentAttributesOfPK(listOfFD, tempPK):
     dependentAttributeOfPK = set()
 
-    for tempFD in listOfFO: 
+    for tempFD in listOfFD: 
         if isFirstPartSubesetOfSecondPart(tempFD.left, set(tempPK)): 
             dependentAttributeOfPK = dependentAttributeOfPK.union(set(tempFD.right)) 
 
@@ -81,8 +81,8 @@ def getDependentAttributesOfPK(listOfFO, tempPK):
 def isFirstPartSubesetOfSecondPart(first, second):
     return set(first).issubset(set(second))
 
-def checkForTransitivity(listOfFO, dependentAttributesOfPK):
-    for tempFD in listOfFO:
+def checkForTransitivity(listOfFD, dependentAttributesOfPK):
+    for tempFD in listOfFD:
             if isFirstPartSubesetOfSecondPart(tempFD.left, set(dependentAttributesOfPK)):
                 dependentAttributesOfPK = dependentAttributesOfPK + tempFD.right
                 dependentAttributesOfPK = ''.join(set(dependentAttributesOfPK))

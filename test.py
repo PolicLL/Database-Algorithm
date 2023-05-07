@@ -2,11 +2,11 @@ import unittest
 import model
 
 class TestFindPrimaryKeys(unittest.TestCase):
-    def testFindPrimaryKeys(self, attributes, listOfFO, expectedPrimaryKeys):
-        relation = model.Relation(attributes, listOfFO)
+    def testFindPrimaryKeys(self, attributes, listOfFD, expectedPrimaryKeys):
+        relation = model.Relation(attributes, listOfFD)
         primaryKeys = relation.keys
 
-        self.assertCountEqual(primaryKeys, expectedPrimaryKeys, f"Primary keys for {attributes} and {listOfFO} are not as expected: {primaryKeys}")
+        self.assertCountEqual(primaryKeys, expectedPrimaryKeys, f"Primary keys for {attributes} and {listOfFD} are not as expected: {primaryKeys}")
         print(f"Primary keys found sucessfuly. Result : {primaryKeys}")
 
 if __name__ == '__main__':

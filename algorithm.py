@@ -8,7 +8,7 @@ import itertools
 def doThirdNormalForm(relation):
     ro = []
 
-    for tempFunctionDep in relation.listOfFO:
+    for tempFunctionDep in relation.listOfFD:
         if isFunctionalDependencyInList(tempFunctionDep, ro) is False:
             ro.append(tempFunctionDep)
 
@@ -26,7 +26,7 @@ def doBCNormalForm(relation):
     ro += relation.attributes
     RO_FO = []
 
-    for tempFunctionDep in relation.listOfFO:
+    for tempFunctionDep in relation.listOfFD:
         if hasAllChars(ro, tempFunctionDep.left) and hasAllChars(ro, tempFunctionDep.right):
             if isSuperKey(relation.keys, tempFunctionDep) is False:
                 for sign in tempFunctionDep.right:

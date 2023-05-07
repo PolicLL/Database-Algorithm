@@ -36,46 +36,46 @@ def printValues(tempAttr, tempFO):
 
 tempAttr = "ABCDEFGHIJ"
 
-tempFO = []
-tempFO.append(model.FunctionalDependency("A","B"))
-tempFO.append(model.FunctionalDependency("C","B"))
-tempFO.append(model.FunctionalDependency("B","E"))
-tempFO.append(model.FunctionalDependency("I","J"))
-tempFO.append(model.FunctionalDependency("H","G"))
-tempFO.append(model.FunctionalDependency("A","D"))
-tempFO.append(model.FunctionalDependency("D","F"))
-tempFO.append(model.FunctionalDependency("A","H"))
+listOfFD = []
+listOfFD.append(model.FunctionalDependency("A","B"))
+listOfFD.append(model.FunctionalDependency("C","B"))
+listOfFD.append(model.FunctionalDependency("B","E"))
+listOfFD.append(model.FunctionalDependency("I","J"))
+listOfFD.append(model.FunctionalDependency("H","G"))
+listOfFD.append(model.FunctionalDependency("A","D"))
+listOfFD.append(model.FunctionalDependency("D","F"))
+listOfFD.append(model.FunctionalDependency("A","H"))
 
 print("TEST 1 : ")
-printValues(tempAttr, tempFO)
+printValues(tempAttr, listOfFD)
 
 # TEST 2
 
 tempAttr = "ABCDEFGHIJ"
 
-tempFO = []
-tempFO.append(model.FunctionalDependency("A","B"))
-tempFO.append(model.FunctionalDependency("C","B"))
-tempFO.append(model.FunctionalDependency("B","E"))
-tempFO.append(model.FunctionalDependency("I","J"))
-tempFO.append(model.FunctionalDependency("H","G"))
+listOfFD = []
+listOfFD.append(model.FunctionalDependency("A","B"))
+listOfFD.append(model.FunctionalDependency("C","B"))
+listOfFD.append(model.FunctionalDependency("B","E"))
+listOfFD.append(model.FunctionalDependency("I","J"))
+listOfFD.append(model.FunctionalDependency("H","G"))
 
 print("TEST 2 : ")
-printValues(tempAttr, tempFO)
+printValues(tempAttr, listOfFD)
 
 # TEST 3
 
 tempAttr = "ABCDEFGHIJ"
 
-tempFO = []
-tempFO.append(model.FunctionalDependency("DI","B"))
-tempFO.append(model.FunctionalDependency("AJ","F"))
-tempFO.append(model.FunctionalDependency("GB","FJE"))
-tempFO.append(model.FunctionalDependency("AJ","HD"))
-tempFO.append(model.FunctionalDependency("I","CG"))
+listOfFD = []
+listOfFD.append(model.FunctionalDependency("DI","B"))
+listOfFD.append(model.FunctionalDependency("AJ","F"))
+listOfFD.append(model.FunctionalDependency("GB","FJE"))
+listOfFD.append(model.FunctionalDependency("AJ","HD"))
+listOfFD.append(model.FunctionalDependency("I","CG"))
 
 print("TEST 3 : ")
-printValues(tempAttr, tempFO)
+printValues(tempAttr, listOfFD)
 
 
 
